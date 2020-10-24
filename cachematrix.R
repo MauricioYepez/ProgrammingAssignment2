@@ -1,15 +1,41 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## Write a short comment describing this function
+### As usual we give some atributes to our matrix
+# like it self and its inverse 
 
 makeCacheMatrix <- function(x = matrix()) {
-#in thi i willll.....
+        m <- NULL
+        set <- function(y) {
+                x <<- y
+                m <<- NULL
+        }
+        get <- function() x
+        setinv <- function(solve) m <<- solve
+        getinv <- function() m
+        list(set = set, get = get, setinv = setinv, getinv = getinv)
 }
 
 
-## Write a short comment describing this function
+## Since we had the assumption of all matrices non-singular
+# no extra code for the determinat was requiered. Nevertheless,
+# if this happened [det=0] we have added some lines of code
+# wich verify and advertice us that the determinat is cero and
+# retunrn the 0 matrix.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        m <- x$getinv()
+        if(!is.null(m)) {
+                message("getting cached data")
+                return(m)
+        }
+
+        data <- x$get()
+	  if(det(data)==0){
+		message("matrix turned out to be singular: Exiting from the program")
+		m<-matrix(rep(nrow(data)*ncol(data),0),nrow(data),ncol(data))
+		m
+	  } else {
+		m <- solve(data, ...)
+		x$setinv(m)
+		m
+	  }
+
 }
